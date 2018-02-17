@@ -1,0 +1,11 @@
+# basic options
+title: Begin Tensorflow
+author: GitHub User
+email: rakeshiitbbs@gmail.com
+description: A wonderful site which describe how to start with tensorflow , with neural network that works in Text analysis
+twitter_username: jekyllrb
+github_username:  jekyll
+
+# Build settings
+markdown: kramdown
+theme: minima
