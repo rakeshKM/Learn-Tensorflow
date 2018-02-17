@@ -8,4 +8,4 @@ github_username:  rakeshKM
 
 # Build settings
 markdown: kramdown
-theme: Cayman
+theme: cayman
