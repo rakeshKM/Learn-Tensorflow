@@ -14,3 +14,7 @@ Reasons:
 ## Other thoughts
 
 This is great.
+
+## vote of thanks: this site was created using 
+  1.https://evanwill.github.io/go-go-ghpages/
+  2.https://www.youtube.com/watch?v=SWVjQsvQocA
