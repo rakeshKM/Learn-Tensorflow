@@ -19,3 +19,4 @@ https://github.com/cahya-wirawan/cnn-text-classification-tf/blob/master/train.py
 more on word2vec https://machinelearningmastery.com/develop-word-embeddings-python-gensim/
 more on pre-prpcessing: https://github.com/mmihaltz/cnn-text-classification-tf
 
+
