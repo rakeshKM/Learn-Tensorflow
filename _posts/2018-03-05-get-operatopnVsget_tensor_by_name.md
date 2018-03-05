@@ -71,3 +71,15 @@ output = my_graph.get_tensor_by_name("op:0")
 print(sess.run(output))
 
 Why does TensorFlow draw this distinction? For one thing, a operation can have multiple outputs, so it is sometimes necessary to be specific about which output you want to fetch. For another, an operation may have a side effect and produce a large output—see tf.assign() for an example—and it is often more efficient to pass the tf.Operation to sess.run() so that the value is not copied back into the Python program.
+
+meta = 'path/to/file.meta'
+
+my_graph = tf.Graph()
+with my_graph.as_default():
+        with tf.Session() as sess:
+                saver = tf.train.import_meta_graph(meta)
+                saver.restore(sess, tf.train.latest_checkpoint(os.path.dirname(meta)))
+                op = my_graph.get_operation_by_name("op")
+                print(sess.run(op))
+                
+                
