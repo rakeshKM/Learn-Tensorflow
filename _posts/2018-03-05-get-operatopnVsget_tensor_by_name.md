@@ -16,6 +16,7 @@ It's possible to have an Op node with no outputs (like tf.group) in which case t
 It is not possible to have tensors without an underlying Op node.
 
 
+
 Variables, constant and placeholders are nodes, aka, instantiation of OPERATIONS just like tf.mul or tf.add . 
 I think they produce tensors as output, but they themselves are not tensors
 
@@ -25,6 +26,8 @@ value = tf.constant(1)
 
 So with tf.constant you get a single operation node, and you can fetch it using sess.run("Const:0") or sess.run(value)
 just the most basic operation node, which contains a fixed value given when you create it
+
+
 
 #tf.placeholder
 
@@ -46,6 +49,8 @@ example 2:
 value=tf.placeholder(tf.int32) # creates a regular node with name Placeholder
 
 feed_dict={"Placeholder:0":2} or feed_dict={value:2}  # both feeding is correct
+
+
 
 
 #tf.Variable 
