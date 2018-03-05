@@ -38,6 +38,7 @@ get_operation_by_name(name) returns a operation with the given name.
 example:
 
 sesstf.Session()
+
 saver = tf.train.import_meta_graph('/home/rakesh/WORK/CNN_Lookout/runs/1519022246/checkpoints/model-200.meta') #load graph
 
 saver.restore(sess,tf.train.latest_checkpoint('/home/rakesh/WORK/CNN_Lookout/runs/1519022246/checkpoints/./')) #load weigt
