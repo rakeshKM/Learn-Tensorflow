@@ -35,7 +35,7 @@ get_tensor_by_name(name) returns a tensor with the given name.
 get_operation_by_name(name) returns a operation with the given name.
 
 
-example:
+example 1:
 
 sess=tf.Session()
 
@@ -52,3 +52,22 @@ embedding_W= graph.get_tensor_by_name("embedding/W") #value error:The name 'embe
 embedding_W= graph.get_operation_by_name("embedding/W") #TypeError: Can't convert Operation 'embedding/W' to Tensor (target dtype=None, name='params_0', as_ref=False)
 
 embedding_W= graph.get_operation_by_name("embedding/W:0") #ValueError: Name 'embedding/W:0' appears to refer to a Tensor, not a Operation.
+##### conclusion W is a tensor as it contain values , not an operation
+
+Example 2:
+
+The tf.Graph.get_operation_by_name() method always returns a tf.Operation object. When you pass a tf.Operation object to tf.Session.run(), TensorFlow will execute that operation (and everything on which it depends) and discard its outputs (if any).
+
+If you are interested in the value of a particular output, you have to tell TensorFlow which output (a tf.Tensor) you are interested in. There are two main options:
+
+Get a tf.Operation from the graph and then select one of its outputs:
+
+op = my_graph.get_operation_by_name("op")
+output = op.outputs[0]
+print(sess.run(output))
+Get a tf.Tensor from the graph by calling tf.Graph.get_tensor_by_name(), and appending ":<output index>" to the operation's name:
+
+output = my_graph.get_tensor_by_name("op:0")
+print(sess.run(output))
+
+Why does TensorFlow draw this distinction? For one thing, a operation can have multiple outputs, so it is sometimes necessary to be specific about which output you want to fetch. For another, an operation may have a side effect and produce a large output—see tf.assign() for an example—and it is often more efficient to pass the tf.Operation to sess.run() so that the value is not copied back into the Python program.
