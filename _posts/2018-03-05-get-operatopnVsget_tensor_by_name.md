@@ -76,10 +76,11 @@ meta = 'path/to/file.meta'
 
 my_graph = tf.Graph()
 with my_graph.as_default():
-        with tf.Session() as sess:
-                saver = tf.train.import_meta_graph(meta)
-                saver.restore(sess, tf.train.latest_checkpoint(os.path.dirname(meta)))
-                op = my_graph.get_operation_by_name("op")
-                print(sess.run(op))
+        - with tf.Session() as sess:
+                -- saver = tf.train.import_meta_graph(meta)
+                -- saver.restore(sess, tf.train.latest_checkpoint(os.path.dirname(meta)))
+                -- op = my_graph.get_operation_by_name("op")
+                --  output = op.outputs[0]
+                --   print(sess.run(output))
                 
                 
