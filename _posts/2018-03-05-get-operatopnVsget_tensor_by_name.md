@@ -38,9 +38,15 @@ get_operation_by_name(name) returns a operation with the given name.
 example:
 sesstf.Session()
 saver = tf.train.import_meta_graph('/home/rakesh/WORK/CNN_Lookout/runs/1519022246/checkpoints/model-200.meta') #load graph
+
 saver.restore(sess,tf.train.latest_checkpoint('/home/rakesh/WORK/CNN_Lookout/runs/1519022246/checkpoints/./')) #load weigt
+
 graph = tf.get_default_graph()
+
 embedding_W= graph.get_tensor_by_name("embedding/W:0") #runs ok
+
 embedding_W= graph.get_tensor_by_name("embedding/W") #value error:The name 'embedding/W' refers to an Operation,Tensor names must be of the form "<op_name>:<output_index>"
+
 embedding_W= graph.get_operation_by_name("embedding/W") #TypeError: Can't convert Operation 'embedding/W' to Tensor (target dtype=None, name='params_0', as_ref=False)
+
 embedding_W= graph.get_operation_by_name("embedding/W:0") #ValueError: Name 'embedding/W:0' appears to refer to a Tensor, not a Operation.
