@@ -1,6 +1,6 @@
 ---
 layout: post
-title: get-operatopnVsget_tensor_by_name
+title: tensor constant,placeholder and variable
 ---
 
  in the graph, every node is an operation, which can have Tensors as inputs or outputs. 
