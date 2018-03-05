@@ -16,5 +16,6 @@ Reasons:
 This is great.
 
 ## vote of thanks: this site was created using 
-  1.https://evanwill.github.io/go-go-ghpages/
-  2.https://www.youtube.com/watch?v=SWVjQsvQocA
+  - https://evanwill.github.io/go-go-ghpages/
+  - https://www.youtube.com/watch?v=SWVjQsvQocA
+  - https://help.github.com/articles/basic-writing-and-formatting-syntax/
