@@ -75,7 +75,9 @@ Why does TensorFlow draw this distinction? For one thing, a operation can have m
 meta = 'path/to/file.meta'
 
 my_graph = tf.Graph()
+
 with my_graph.as_default():
+
      - with tf.Session() as sess:
      
             - saver = tf.train.import_meta_graph(meta)
