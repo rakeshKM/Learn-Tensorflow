@@ -61,10 +61,10 @@ The tf.Graph.get_operation_by_name() method always returns a tf.Operation object
 If you are interested in the value of a particular output, you have to tell TensorFlow which output (a tf.Tensor) you are interested in. There are two main options:
 
 Get a tf.Operation from the graph and then select one of its outputs:
-
-op = my_graph.get_operation_by_name("op")
-output = op.outputs[0]
-print(sess.run(output))
+     op = my_graph.get_operation_by_name("op")
+     output = op.outputs[0]
+     print(sess.run(output))
+     
 Get a tf.Tensor from the graph by calling tf.Graph.get_tensor_by_name(), and appending ":<output index>" to the operation's name:
 
 output = my_graph.get_tensor_by_name("op:0")
