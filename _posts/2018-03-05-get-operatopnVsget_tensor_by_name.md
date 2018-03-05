@@ -28,6 +28,7 @@ A Tensor is a symbolic handle to one of the outputs of an Operation. It does not
 
 # https://stackoverflow.com/questions/48022794/tensorflow-difference-get-tensor-by-name-vs-get-operation-by-name?noredirect=1&lq=1
 
+# http://cv-tricks.com/tensorflow-tutorial/save-restore-tensorflow-models-quick-complete-tutorial/
 
 You could add_collection(name, operation/tensor) to the graph, and get_collection(name) returns a list of values in the collection with the given name.
 
