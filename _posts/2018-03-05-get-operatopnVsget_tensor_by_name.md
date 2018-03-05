@@ -24,3 +24,6 @@ tensor = graph.get_tensor_by_name('logits:0')
 Represents one of the outputs of an Operation.
 
 A Tensor is a symbolic handle to one of the outputs of an Operation. It does not hold the values of that operation's output, but instead provides a means of computing those values in a TensorFlow tf.Session.
+
+
+# https://stackoverflow.com/questions/48022794/tensorflow-difference-get-tensor-by-name-vs-get-operation-by-name?noredirect=1&lq=1
