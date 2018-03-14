@@ -7,6 +7,7 @@ title: CNN Visualizaion
 #### finding gradient of layer
 tf.gradients(layer_output_tensor, input_x). This will give you direct original data from any given layer output tensor
 
+### https://github.com/tensorflow/tensorflow/issues/2169
 #### unpooling
 
     def unravel_argmax(argmax, shape):
@@ -120,6 +121,76 @@ tf.gradients(layer_output_tensor, input_x). This will give you direct original d
             ret.set_shape(set_output_shape)
             return ret
 
+#### pre-1
+    def unravel_argmax(argmax, shape):
+        argmax_shape = argmax.get_shape()
+        new_1dim_shape = tf.shape(tf.constant(0, shape=[tf.Dimension(4), argmax_shape[0]*argmax_shape[1]*argmax_shape[2]*argmax_shape[3]]))
+        batch_shape = tf.constant(0, dtype=tf.int64, shape=[argmax_shape[0], 1, 1, 1]).get_shape()
+        b = tf.multiply(tf.ones_like(argmax), tf.reshape(tf.range(shape[0]), batch_shape))
+        y = argmax // (shape[2] * shape[3])
+        x = argmax % (shape[2] * shape[3]) // shape[3]
+        c = tf.ones_like(argmax) * tf.range(shape[3])
+        pack = tf.stack([b, y, x, c])
+        pack = tf.reshape(pack, new_1dim_shape)
+        pack = tf.transpose(pack)
+        return pack
+
+
+    def unpool(updates, mask, ksize=[1, 2, 2, 1]):
+        input_shape = updates.get_shape()
+        new_dim_y = input_shape[1] * ksize[1]
+        new_dim_x = input_shape[2] * ksize[2]
+        output_shape = tf.to_int64((tf.constant(0, dtype=tf.int64, shape=[input_shape[0], new_dim_y, new_dim_x, input_shape[3]]).get_shape()))
+        indices = unravel_argmax(mask, output_shape)
+        new_1dim_shape = tf.shape(tf.constant(0, shape=[input_shape[0] * input_shape[1] * input_shape[2] * input_shape[3]]))
+        values = tf.reshape(updates, new_1dim_shape)
+        ret = tf.scatter_nd(indices, values, output_shape)
+    return ret
+    
+    here:
+          'mask' - is the result of the tf.nn.max_pool_with_argmax(input=image, ksize=ksize, strides=[1, 2, 2, 1], padding='SAME') operation.
+    mask is the tensor of indices of max values of input_tensor.
+    input_tensor is the input tensor of the maxpool operation.
+    This operation ( unpool ) is inverted to the maxpool.
+    
+#### pre-2
+   
+       I think I found bug/issue with tf.nn.max_pool_with_argmax and the unpool workaround as presented here.
+
+    tf.nn.max_pool_with_argmax indices are calculated as (y * w + x) * channels + c, but the "w" the width of the input tensor, not the width of the input tensor + padding, if any padding (padding='SAME' and width of tensor being odd) is applied.
+
+    Using the unpool method, the width is calculated by dividing/modulo that output with input_shape[2] * ksize[2], with padding this will be 1 pixel bigger than the width that tf.nn.max_pool_with_argmax uses for its argmax output. So if a padding is applied, every row of the output image of the unpool() op will be slightly offset, leading to the image being slightly tilted.
+
+    I'm currently implementing SegNet, which has several unpool operations one after the other, each making the tilting worse if there was any padding for it, which is really noticeable when looking at the final output.
+
+    My workaround was to change the proposed unpool operation by simply adding an input-argument for the output shape as follows:
+
+    def unpool(updates, mask, ksize=[1, 2, 2, 1], output_shape=None, name=''):
+        with tf.variable_scope(name):
+            mask = tf.cast(mask, tf.int32)
+            input_shape = tf.shape(updates, out_type=tf.int32)
+            #  calculation new shape
+            if output_shape is None:
+                output_shape = (input_shape[0], input_shape[1] * ksize[1], input_shape[2] * ksize[2], input_shape[3])
+
+            # calculation indices for batch, height, width and feature maps
+            one_like_mask = tf.ones_like(mask, dtype=tf.int32)
+            batch_shape = tf.concat([[input_shape[0]], [1], [1], [1]], 0)
+            batch_range = tf.reshape(tf.range(output_shape[0], dtype=tf.int32), shape=batch_shape)
+            b = one_like_mask * batch_range
+            y = mask // (output_shape[2] * output_shape[3])
+            x = (mask // output_shape[3]) % output_shape[2] #mask % (output_shape[2] * output_shape[3]) // output_shape[3]
+            feature_range = tf.range(output_shape[3], dtype=tf.int32)
+            f = one_like_mask * feature_range
+            # transpose indices & reshape update values to one dimension
+            updates_size = tf.size(updates)
+            indices = tf.transpose(tf.reshape(tf.stack([b, y, x, f]), [4, updates_size]))
+            values = tf.reshape(updates, [updates_size])
+            ret = tf.scatter_nd(indices, values, output_shape)
+            return ret
+    then when calling the op, I supply the shape of the convolution in the encoder part of segnet as output_shape, so the code will use the correct (well, incorrect...) width when transforming the tf.nn.max_pool_with_argmax indices.
+
+    Arguably, this is a bug with tf.nn.max_pool_with_argmax, since it should calculate the argmax indices by taking potential padding into account
 #### in documentation 
 
        def unpool_2d(pool, 
