@@ -6,6 +6,7 @@ title: CNN Visualizaion
 
 ## visualization through tensorboard
 https://github.com/dandelionmane/tf-dev-summit-tensorboard-tutorial
+
 https://www.youtube.com/watch?list=PLOU2XLYxmsIKGc_NBoIhTn2Qhraji53cv&v=eBbEDRsCmv4
 
 #### finding gradient of layer
