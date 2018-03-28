@@ -4,6 +4,10 @@ layout: post
 title: CNN Visualizaion
 ---
 
+## visualization through tensorboard
+https://github.com/dandelionmane/tf-dev-summit-tensorboard-tutorial
+https://www.youtube.com/watch?list=PLOU2XLYxmsIKGc_NBoIhTn2Qhraji53cv&v=eBbEDRsCmv4
+
 #### finding gradient of layer
 tf.gradients(layer_output_tensor, input_x). This will give you direct original data from any given layer output tensor
 
