@@ -1,0 +1,10 @@
+---
+layout: post
+title: Common Errors
+---
+
+Error1:
+ValueError: Variable embed/W already exists, disallowed. Did you mean to set reuse=True or reuse=tf.AUTO_REUSE in VarScope? 
+Originally defined at:
+sol:
+TensorFlow will raise this error, because the graph (with it's layer names) already exists. so to solve just insert a simple tf.reset_default_graph() 
